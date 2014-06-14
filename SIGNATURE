@@ -1,0 +1,42 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.73.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+SHA1 61d8c3d7e767b38ab10fbc3a2f642a94429b8b92 Changes
+SHA1 7067c10c8f189ca778281dbfa3f7949628edc91d MANIFEST
+SHA1 009bff2638bf20a66c5eb60b84d99557f605442c META.json
+SHA1 1e0d14fd6d480212da3487273c92edb7304432bd META.yml
+SHA1 4ca4dfa79dbca0c7636741cc3ea9d0807c32da6f Makefile.PL
+SHA1 31f35aca3edd2795156e48d8edd8c5cabc369444 README
+SHA1 8b22e4ac21677da5d984fbaf1fa6b083dcaaa337 lib/WWW/BackpackTF.pm
+SHA1 9c0c9c1afab7f95dac819aad8b28fe55dc1e954a lib/WWW/BackpackTF/User.pm
+SHA1 cc1c04c80225dfc180a5c834fd83a5ab4c6d3538 t/WWW-BackpackTF.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBCgAGBQJTnNw8AAoJEMoENb5ewbNiZGQP/2sdmcqJGb/de3BH/7mYZFln
+d3WnwCm/jCuWVvVbLzf4kjEn36zq2dMD/k4gHbMdOeOXYI3tKLODwh4gWJZkzMdK
+vtBrt87be+59QXI349uet6BuEgzDpLxGjjy/RE6fl0b0chCw3fNyyCcmBBC26tbJ
+qWyVobvWGAHqIpRD+/OYCFQU6SddD9X7+vRSq60+AtRnd9G3juqhvSZS7gekrQOg
+26F/ZstooJgF0U8GQRgDUauOXWYYu10v6lowNbe94rDjDX+iKdcdr9mLRrTxIzlS
+2u0L6aD77hFplzIqtlDZe5/iTqnetD2BK6bmb20bYM5DPXtUBG7oePkL7dwO2Aq+
+6oFnxcb4XDr4gx97i2363sDON/EIsZZxQHn4MsO6Ykbd/UIdbmfnXqcpOyt8H3yn
+M/WZ5QmYPXr/U5BoGzeq6DP3tu4S+4l/GOcDzZpVTpaokQHYi2iKnmYQEhJzO9Vo
+QkgAmlz5WFtfq8NGZn8TpMe2JvLFsgp22FdIbXiaoyyFrF0UxdJBp9KrMBFcfgpS
+KPQoNJlxE1RWYsBj+tg2JtmrGWP8NB3CBMsDgZ5scnK5Ne7Av/PNRy3JV/pEPCpV
+xmO48wGe5fBb7cOOGauhySrPswaG5zaKsaz6WEK0yIjlvMXljmmvcQgt1UFB/b0O
+9zc2BHf9FPyVzIhlybnN
+=sVj6
+-----END PGP SIGNATURE-----
