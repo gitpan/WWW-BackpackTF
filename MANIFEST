@@ -1,5 +1,7 @@
 Changes
 lib/WWW/BackpackTF.pm
+lib/WWW/BackpackTF/Currency.pm
+lib/WWW/BackpackTF/Item.pm
 lib/WWW/BackpackTF/User.pm
 Makefile.PL
 MANIFEST

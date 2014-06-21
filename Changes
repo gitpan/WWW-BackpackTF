@@ -1,4 +1,7 @@
 Revision history for Perl extension WWW::BackpackTF.
 
+0.000_002 2014-06-22T02:21+03:00
+ - Add IGetPrices and IGetCurrencies calls
+
 0.000_001 2014-06-15T02:35+03:00
  - Initial release

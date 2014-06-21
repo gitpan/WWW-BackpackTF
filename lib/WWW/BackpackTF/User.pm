@@ -3,7 +3,7 @@ package WWW::BackpackTF::User;
 use 5.014000;
 use strict;
 use warnings;
-our $VERSION = '0.000_001';
+our $VERSION = '0.000_002';
 
 sub new{
 	my ($class, $content) = @_;
@@ -130,6 +130,10 @@ Returns the total value of this user's backpack for the specified game, in the l
 Returns the UNIX timestamp of this user's last backpack update for the specified game. I<game> defaults to C<WWW::BackpackTF::TF2>
 
 =back
+
+=head1 SEE ALSO
+
+L<http://backpack.tf/api/users>
 
 =head1 AUTHOR
 

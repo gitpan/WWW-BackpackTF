@@ -34,6 +34,7 @@
          "requires" : {
             "JSON" : "0",
             "LWP::Simple" : "0",
+            "PerlX::Maybe" : "0",
             "perl" : "5.014000"
          }
       }
@@ -44,5 +45,5 @@
          "url" : "https://git.ieval.ro/?p=www-backpacktf.git"
       }
    },
-   "version" : "0.000_001"
+   "version" : "0.000_002"
 }

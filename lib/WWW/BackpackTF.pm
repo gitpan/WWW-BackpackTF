@@ -4,28 +4,64 @@ use 5.014000;
 use strict;
 use warnings;
 use parent qw/Exporter/;
-our $VERSION = '0.000_001';
+our $VERSION = '0.000_002';
 our @EXPORT_OK = qw/TF2 DOTA2/;
 
-use constant TF2 => 440;
-use constant DOTA2 => 570;
+use constant +{
+	TF2 => 440,
+	DOTA2 => 570,
+	QUALITIES => [qw/Normal Genuine rarity2 Vintage rarity3 Unusual Unique Community Valve Self-Made Customized Strange Completed Haunted Collector's/],
+};
+
+BEGIN {
+	my @qualities = @{QUALITIES()};
+	for (0 .. $#qualities) {
+		my $name = uc $qualities[$_];
+		$name =~ y/A-Z0-9//cd;
+		constant->import($name, $_)
+	}
+}
 
 use JSON qw/decode_json/;
 use LWP::Simple qw/get/;
+use PerlX::Maybe;
+use WWW::BackpackTF::Currency;
+use WWW::BackpackTF::Item;
 use WWW::BackpackTF::User;
 
-sub new{
-	my ($class, $key) = @_;
-	bless {key => $key}, $class
+sub request {
+	my ($self, $url, %params) = @_;
+	$params{key} = $self->{key};
+	$url = $self->{base} . $url;
+	$url .= "&$_=$params{$_}" for keys %params;
+	my $response = decode_json(get $url)->{response};
+	die $response->{message} unless $response->{success};
+	$response
 }
 
-sub get_users{
+sub new{
+	my ($class, %args) = @_;
+	$args{base} //= 'http://backpack.tf/api/';
+	bless \%args, $class
+}
+
+sub get_prices {
+	my ($self, $appid, $raw) = @_;
+	my $response = $self->request('IGetPrices/v4/?compress=1', maybe appid => $appid, maybe raw => $raw);
+	map { WWW::BackpackTF::Item->new($_, $response->{items}{$_}) } keys $response->{items}
+}
+
+sub get_users {
 	my ($self, @users) = @_;
-	my $response = decode_json get "http://backpack.tf/api/IGetUsers/v3/?compress=1&format=json&steamids=" . join ',', @users;
-	$response = $response->{response};
-	die $response->{message} unless $response->{success};
+	my $response = $self->request('IGetUsers/v3/?compress=1', steamids => join ',', @users);
 	@users = map { WWW::BackpackTF::User->new($_) } values $response->{players};
 	wantarray ? @users : $users[0]
+}
+
+sub get_currencies {
+	my ($self, $appid) = @_;
+	my $response = $self->request('IGetCurrencies/v1/?compress=1', maybe appid => $appid);
+	map { WWW::BackpackTF::Currency->new($_, $response->{currencies}{$_}) } keys $response->{currencies};
 }
 
 1;
@@ -43,24 +79,45 @@ WWW::BackpackTF - interface to the backpack.tf trading service
   my $bp = WWW::BackpackTF->new($api_key);
   my $user = $bp->get_users($user_id);
   print 'This user is named ', $user->name, ' and has ', $user->notifications, ' unread notification(s)';
+  my @all_items_in_dota2 = $bp->get_prices(WWW::BackpackTF::DOTA2);
+  my @currencies = $bp->get_currencies;
+  print 'The first currency is ', $currencies[0]->name;
 
 =head1 DESCRIPTION
 
 WWW::BackpackTF is an interface to the backpack.tf Team Fortress 2/Dota 2 trading service.
 
-The only call implemented so far is I<IGetUsers>.
-
 =head2 METHODS
 
 =over
 
-=item B<new>(I<[$api_key]>)
+=item B<new>([key => I<$api_key>], [base => I<$base_url>])
 
-Create a new WWW::BackpackTF object. Takes a single optional parameter, the API key.
+Create a new WWW::BackpackTF object. Takes a hash of parameters. Possible parameters:
+
+=over
+
+=item B<key>
+
+The API key. Defaults to nothing. Most methods require an API key.
+
+=item B<base>
+
+The base URL. Defaults to http://backpack.tf/api/.
+
+=back
+
+=item B<get_prices>([I<$appid>, [I<$raw>]])
+
+Get price information for all items. Takes two optional parameters. The first parameter is the appid and defaults to WWW::BackpackTF::TF2. The second (if true) adds a value_raw property to prices and defaults to false. Returns a list of L<WWW::BackpackTF::Item> objects.
 
 =item B<get_users>(I<@users>)
 
-Get profile information for a list of users. Takes any number of 64-bit Steam IDs as arguments and returns a list of WWW::BackpackTF::User objects. This method does not require an API key.
+Get profile information for a list of users. Takes any number of 64-bit Steam IDs as arguments and returns a list of L<WWW::BackpackTF::User> objects. This method does not require an API key. Dies with an error message if the operation is unsuccessful.
+
+=item B<get_currencies>([I<$appid>])
+
+Get currency information. Takes one optional parameter, the appid, which defaults to WWW::BackpackTF::TF2. Returns a list of L<WWW::BackpackTF::Currency> objects.
 
 =back
 
@@ -77,6 +134,66 @@ Constant (440) representing Team Fortress 2.
 =item B<DOTA2>
 
 Constant (570) representing Dota 2.
+
+=item B<NORMAL>
+
+The Normal item quality (0).
+
+=item B<GENUINE>
+
+The Genuine item quality (1).
+
+=item B<RARITY2>
+
+The unused rarity2 item quality (2).
+
+=item B<VINTAGE>
+
+The Vintage item quality (3).
+
+=item B<RARITY3>
+
+The unused rarity3 item quality (4).
+
+=item B<UNUSUAL>
+
+The Unusual item quality (5).
+
+=item B<UNIQUE>
+
+The Unique item quality (6).
+
+=item B<COMMUNITY>
+
+The Community item quality (7).
+
+=item B<VALVE>
+
+The Valve item quality (8).
+
+=item B<SELFMADE>
+
+The Self-Made item quality (9).
+
+=item B<CUSTOMIZED>
+
+The unused Customized item quality (10).
+
+=item B<STRANGE>
+
+The Strange item quality (11).
+
+=item B<COMPLETED>
+
+The Completed item quality (12).
+
+=item B<HAUNTED>
+
+The Haunted item quality (13).
+
+=item B<COLLECTORS>
+
+The Collector's item quality (14).
 
 =back
 

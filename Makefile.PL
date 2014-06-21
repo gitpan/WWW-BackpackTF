@@ -11,7 +11,8 @@ WriteMakefile(
 	SIGN              => 1,
 	PREREQ_PM         => {
 		qw/JSON 0
-		   LWP::Simple 0/,
+		   LWP::Simple 0
+		   PerlX::Maybe 0/,
 	},
 	META_MERGE        => {
 		dynamic_config => 0,
