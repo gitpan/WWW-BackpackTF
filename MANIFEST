@@ -6,7 +6,8 @@ lib/WWW/BackpackTF/User.pm
 Makefile.PL
 MANIFEST
 README
-t/WWW-BackpackTF.t
+t/00-load.t
+t/50-network.t
 META.yml                                 Module YAML meta-data (added by MakeMaker)
 META.json                                Module JSON meta-data (added by MakeMaker)
 SIGNATURE                                Public-key signature (added by MakeMaker)

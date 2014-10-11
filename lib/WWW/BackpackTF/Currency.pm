@@ -3,7 +3,7 @@ package WWW::BackpackTF::Currency;
 use 5.014000;
 use strict;
 use warnings;
-our $VERSION = '0.000_002';
+our $VERSION = '0.000_003';
 
 sub new{
 	my ($class, $name, $content) = @_;

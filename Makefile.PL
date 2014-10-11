@@ -10,9 +10,12 @@ WriteMakefile(
 	LICENSE           => 'perl',
 	SIGN              => 1,
 	PREREQ_PM         => {
-		qw/JSON 0
+		qw/JSON::MaybeXS 0
 		   LWP::Simple 0
 		   PerlX::Maybe 0/,
+	},
+	BUILD_REQUIRES    => {
+		qw/LWP::Online 0/,
 	},
 	META_MERGE        => {
 		dynamic_config => 0,

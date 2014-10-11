@@ -1,5 +1,9 @@
 Revision history for Perl extension WWW::BackpackTF.
 
+0.000_003 2014-10-12T01:38+03:00
+ - Switch from JSON to JSON::MaybeXS
+ - Add a network test for get_users
+
 0.000_002 2014-06-22T02:21+03:00
  - Add IGetPrices and IGetCurrencies calls
 

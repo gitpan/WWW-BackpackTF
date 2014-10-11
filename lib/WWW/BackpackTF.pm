@@ -4,7 +4,7 @@ use 5.014000;
 use strict;
 use warnings;
 use parent qw/Exporter/;
-our $VERSION = '0.000_002';
+our $VERSION = '0.000_003';
 our @EXPORT_OK = qw/TF2 DOTA2/;
 
 use constant +{
@@ -22,7 +22,7 @@ BEGIN {
 	}
 }
 
-use JSON qw/decode_json/;
+use JSON::MaybeXS qw/decode_json/;
 use LWP::Simple qw/get/;
 use PerlX::Maybe;
 use WWW::BackpackTF::Currency;
@@ -31,7 +31,7 @@ use WWW::BackpackTF::User;
 
 sub request {
 	my ($self, $url, %params) = @_;
-	$params{key} = $self->{key};
+	$params{key} = $self->{key} if $self->{key};
 	$url = $self->{base} . $url;
 	$url .= "&$_=$params{$_}" for keys %params;
 	my $response = decode_json(get $url)->{response};
@@ -48,20 +48,20 @@ sub new{
 sub get_prices {
 	my ($self, $appid, $raw) = @_;
 	my $response = $self->request('IGetPrices/v4/?compress=1', maybe appid => $appid, maybe raw => $raw);
-	map { WWW::BackpackTF::Item->new($_, $response->{items}{$_}) } keys $response->{items}
+	map { WWW::BackpackTF::Item->new($_, $response->{items}{$_}) } keys %{$response->{items}}
 }
 
 sub get_users {
 	my ($self, @users) = @_;
 	my $response = $self->request('IGetUsers/v3/?compress=1', steamids => join ',', @users);
-	@users = map { WWW::BackpackTF::User->new($_) } values $response->{players};
+	@users = map { WWW::BackpackTF::User->new($_) } values %{$response->{players}};
 	wantarray ? @users : $users[0]
 }
 
 sub get_currencies {
 	my ($self, $appid) = @_;
 	my $response = $self->request('IGetCurrencies/v1/?compress=1', maybe appid => $appid);
-	map { WWW::BackpackTF::Currency->new($_, $response->{currencies}{$_}) } keys $response->{currencies};
+	map { WWW::BackpackTF::Currency->new($_, $response->{currencies}{$_}) } keys %{$response->{currencies}};
 }
 
 1;
